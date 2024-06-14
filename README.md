@@ -29,7 +29,7 @@
    克隆或下载本项目的源码到您的本地计算机。
 
    ```bash
-   git clone https://github.com/your-repo/v2x-toolbox.git
+   git clone https://gitee.com/zolty/v2xbox.git
    ```
 
 2. **打开项目**
@@ -57,13 +57,11 @@
 如有任何问题或建议，请通过以下方式与我们联系：
 
 - Email: zolty@qq.com
-- GitHub: [https://github.com/your-repo/v2x-toolbox](https://github.com/your-repo/v2x-toolbox)
+- GitHub: [https://gitee.com/zolty/v2xbox](https://gitee.com/zolty/v2xbox)
 
 ---
 
 感谢您的使用！希望 V2X 工具箱能为您的工作和生活带来便利。
-
-![V2X 工具箱](https://via.placeholder.com/728x90.png?text=V2X+工具箱)
 
 ---
 
