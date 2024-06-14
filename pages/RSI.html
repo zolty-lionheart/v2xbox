@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Hello MUI</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!--标准mui.css-->
+  <link rel="stylesheet" href="../css/mui.min.css">
+  <!--App自定义的css-->
+  <!--<link rel="stylesheet" type="text/css" href="../css/app.css"/>-->
+
+</head>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">交通标志列表</h1>
+  </header>
+  <div class="mui-content">
+    <div class="mui-content-padded" style="margin: 2%">
+      <div class="mui-input-row mui-search">
+        <input type="search" id="searchInput1" class="mui-input-clear" placeholder="搜索序号">
+      </div>
+      <div class="mui-input-row mui-search">
+        <input type="search" id="searchInput2" class="mui-input-clear" placeholder="搜索标志编号">
+      </div>
+      <div class="mui-input-row mui-search">
+        <input type="search" id="searchInput3" class="mui-input-clear" placeholder="搜索标志名称">
+      </div>
+      <div class="mui-input-row mui-search">
+        <input type="search" id="searchInput4" class="mui-input-clear" placeholder="搜索条号">
+      </div>
+      <button type="button" onclick="search()" class="mui-btn mui-btn-primary mui-icon mui-icon-search" style="width: 100%;">
+        搜索
+      </button>
+      <ul id="trafficSignsList"></ul>
+    </div>
+  </div>
+
+  <script src="../js/mui.min.js"></script>
+  <script src="../js/trafficSigns.js"></script>
+  <script>
+    // 数据数组
+
+    // 获取列表元素
+    const trafficSignsList = document.getElementById('trafficSignsList');
+
+    // 将数据动态添加到列表中
+    function renderList(signs) {
+      // 清空列表
+      trafficSignsList.innerHTML = '';
+
+      // 添加数据到列表
+      signs.forEach(sign => {
+        const listItem = document.createElement('li');
+        listItem.textContent = `${sign.id} - ${sign.no} - ${sign.name} - ${sign.rule}`;
+        trafficSignsList.appendChild(listItem);
+      });
+    }
+
+    // 搜索函数
+    function search() {
+      const searchInput1 = document.getElementById('searchInput1').value.trim().toLowerCase();
+      const searchInput2 = document.getElementById('searchInput2').value.trim().toLowerCase();
+      const searchInput3 = document.getElementById('searchInput3').value.trim().toLowerCase();
+      const searchInput4 = document.getElementById('searchInput4').value.trim().toLowerCase();
+
+      // 进行搜索
+      const filteredSigns = trafficSigns.filter(sign =>
+        sign.id.toString().toLowerCase().includes(searchInput1) &&
+        sign.no.toLowerCase().includes(searchInput2) &&
+        sign.name.toLowerCase().includes(searchInput3) &&
+        sign.rule.toLowerCase().includes(searchInput4)
+      );
+
+      // 更新列表显示
+      renderList(filteredSigns);
+    }
+
+    // 初始显示所有数据
+    renderList(trafficSigns);
+  </script>
+
+</body>
+
+</html>

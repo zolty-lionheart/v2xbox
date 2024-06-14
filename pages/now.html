@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>当前时间戳</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- 标准mui.css -->
+  <link rel="stylesheet" href="../css/mui.min.css">
+</head>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">当前时间戳</h1>
+  </header>
+  <div class="mui-content">
+    <div class="mui-content-padded">
+      <div id="timestamp" class="mui-text-center" style="font-size: 20px; margin: 20px 0;">
+        <span class="seconds mui--text-blue"></span><span class="milliseconds" style="color: orange;"></span>
+      </div>
+      <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="copyText('timestamp')">复制时间戳</button>
+      <div class="mui-divider"></div>
+      <div id="currentTime" class="mui-text-center" style="font-size: 20px; margin: 20px 0;"></div>
+      <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="copyText('currentTime')">复制当前时间</button>
+    </div>
+  </div>
+
+  <script src="../js/mui.min.js"></script>
+  <script>
+    function updateTime() {
+      const now = new Date();
+      const timestamp = now.getTime();
+      const seconds = Math.floor(timestamp / 1000);
+      const milliseconds = timestamp % 1000;
+
+      document.querySelector('.seconds').textContent = seconds;
+      document.querySelector('.milliseconds').textContent = '.' + ('00' + milliseconds).slice(-3);
+
+      const currentTime = now.toLocaleString('zh-CN', { hour12: false });
+      document.getElementById('currentTime').textContent = currentTime;
+    }
+
+    function copyText(elementId) {
+      const element = document.getElementById(elementId);
+      const text = element.textContent;
+      const tempInput = document.createElement('input');
+      tempInput.style.position = 'absolute';
+      tempInput.style.left = '-9999px';
+      tempInput.value = text;
+      document.body.appendChild(tempInput);
+      tempInput.select();
+      document.execCommand('copy');
+      document.body.removeChild(tempInput);
+      mui.alert('内容已复制');
+    }
+
+    setInterval(updateTime, 1);
+    updateTime();
+  </script>
+</body>
+
+</html>
