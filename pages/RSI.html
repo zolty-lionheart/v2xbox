@@ -34,15 +34,27 @@
       <div class="mui-input-row mui-search">
         <input type="search" id="searchInput4" class="mui-input-clear" placeholder="搜索条号">
       </div>
-      <button type="button" onclick="search()" class="mui-btn mui-btn-primary mui-icon mui-icon-search" style="width: 100%;">
+      <button type="button" onclick="search()" class="mui-btn mui-btn-primary mui-icon mui-icon-search"
+        style="width: 100%;">
         搜索
       </button>
       <ul id="trafficSignsList"></ul>
     </div>
   </div>
+  <footer class="mui-bar mui-bar-footer">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span>
+    <span class="mui-tab-item">Designed by zolty.com</span>
+    <span class="mui-tab-item" onclick="sendEmail()">Email: <a
+        href="mailto:contact@zolty.com">contact@zolty.com</a></span>
+  </footer>
 
+  <script>
+    function sendEmail() {
+      window.location.href = "mailto:contact@zolty.com";
+    }
+  </script>
   <script src="../js/mui.min.js"></script>
-  <script src="../js/trafficSigns.js"></script>
+  <script src="../js/list_trafficsign.js"></script>
   <script>
     // 数据数组
 

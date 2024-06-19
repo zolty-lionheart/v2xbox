@@ -25,10 +25,22 @@
       <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="copyText('timestamp')">复制时间戳</button>
       <div class="mui-divider"></div>
       <div id="currentTime" class="mui-text-center" style="font-size: 20px; margin: 20px 0;"></div>
-      <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="copyText('currentTime')">复制当前时间</button>
+      <button type="button" class="mui-btn mui-btn-primary mui-btn-block"
+        onclick="copyText('currentTime')">复制当前时间</button>
     </div>
   </div>
+  <footer class="mui-bar mui-bar-footer">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span>
+    <span class="mui-tab-item">Designed by zolty.com</span>
+    <span class="mui-tab-item" onclick="sendEmail()">Email: <a
+        href="mailto:contact@zolty.com">contact@zolty.com</a></span>
+  </footer>
 
+  <script>
+    function sendEmail() {
+      window.location.href = "mailto:contact@zolty.com";
+    }
+  </script>
   <script src="../js/mui.min.js"></script>
   <script>
     function updateTime() {
