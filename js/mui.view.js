@@ -27,7 +27,7 @@
 	var SELECTOR_CENTER = '.' + CLASS_CENTER;
 	var SELECTOR_RIGHT = '.' + CLASS_RIGHT;
 
-	var SELECTOR_ICON = $.classSelector('.icon');
+	var SELECTOR_ICON = $.classSelector('.icon.svg');
 	var SELECTOR_NAVBAR = $.classSelector('.navbar');
 	var SELECTOR_NAVBAR_INNER = $.classSelector('.navbar-inner');
 	var SELECTOR_PAGES = $.classSelector('.pages');

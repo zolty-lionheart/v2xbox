@@ -10,6 +10,7 @@
 
   <!-- 标准mui.css -->
   <link rel="stylesheet" href="../css/mui.min.css">
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?">
 </head>
 
 <body>
@@ -49,7 +50,7 @@
       const milliseconds = timestamp % 1000;
 
       document.querySelector('.seconds').textContent = seconds;
-      document.querySelector('.milliseconds').textContent = '.' + ('00' + milliseconds).slice(-3);
+      document.querySelector('.milliseconds').textContent = ('00' + milliseconds).slice(-3);
 
       const currentTime = now.toLocaleString('zh-CN', { hour12: false });
       document.getElementById('currentTime').textContent = currentTime;

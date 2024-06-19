@@ -14,7 +14,7 @@
 	var CLASS_PULL_LOADING = $.className('pull-loading');
 	var CLASS_SCROLL = $.className('scroll');
 
-	var CLASS_PULL_TOP_ARROW = $.className('pull-loading') + ' ' + $.className('icon') + ' ' + $.className('icon-pulldown');
+	var CLASS_PULL_TOP_ARROW = $.className('pull-loading') + ' ' + $.className('icon') + ' ' + $.className('icon.svg-pulldown');
 	var CLASS_PULL_TOP_ARROW_REVERSE = CLASS_PULL_TOP_ARROW + ' ' + $.className('reverse');
 	var CLASS_PULL_TOP_SPINNER = $.className('pull-loading') + ' ' + $.className('spinner');
 	var CLASS_HIDDEN = $.className('hidden');
@@ -108,7 +108,7 @@
 					if (!element) {
 						element = document.createElement('div');
 						element.classList.add(CLASS_PULL_TOP_TIPS);
-						element.innerHTML = '<div class="mui-pull-top-wrapper"><span class="mui-pull-loading mui-icon mui-icon-pulldown"></span></div>';
+						element.innerHTML = '<div class="mui-pull-top-wrapper"><span class="mui-pull-loading mui-icon.svg mui-icon.svg-pulldown"></span></div>';
 						element.addEventListener('webkitTransitionEnd', self);
 					}
 					self.pullDownTipsIcon = element.querySelector(SELECTOR_PULL_LOADING);

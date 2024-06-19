@@ -41,7 +41,7 @@
 			self.el = self.el || {};
 			self.el.search = self.box.querySelector(classSelector('indexed-list-search'));
 			self.el.searchInput = self.box.querySelector(classSelector('indexed-list-search-input'));
-			self.el.searchClear = self.box.querySelector(classSelector('indexed-list-search') + ' ' + classSelector('icon-clear'));
+			self.el.searchClear = self.box.querySelector(classSelector('indexed-list-search') + ' ' + classSelector('icon.svg-clear'));
 			self.el.bar = self.box.querySelector(classSelector('indexed-list-bar'));
 			self.el.barItems = [].slice.call(self.box.querySelectorAll(classSelector('indexed-list-bar') + ' a'));
 			self.el.inner = self.box.querySelector(classSelector('indexed-list-inner'));
@@ -163,7 +163,7 @@
 				var keyword = this.value;
 				self.search(keyword);
 			}, false);
-			$(self.el.search).on('tap', classSelector('icon-clear'), function() {
+			$(self.el.search).on('tap', classSelector('icon.svg-clear'), function() {
 				self.search('');
 			}, false);
 		},

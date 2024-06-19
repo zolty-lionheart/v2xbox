@@ -49,9 +49,9 @@
 		starIndex = 0;
 		//清除所有星标
 		mui('.icons i').each(function (index,element) {
-			if (element.classList.contains('mui-icon-star-filled')) {
-				element.classList.add('mui-icon-star')
-	  			element.classList.remove('mui-icon-star-filled')
+			if (element.classList.contains('mui-icon.svg-star-filled')) {
+				element.classList.add('mui-icon.svg-star')
+	  			element.classList.remove('mui-icon.svg-star-filled')
 			}
 		})
 	};
@@ -213,15 +213,15 @@
 	  	var index = parseInt(this.getAttribute("data-index"));
 	  	var parent = this.parentNode;
 	  	var children = parent.children;
-	  	if(this.classList.contains("mui-icon-star")){
+	  	if(this.classList.contains("mui-icon.svg-star")){
 	  		for(var i=0;i<index;i++){
-  				children[i].classList.remove('mui-icon-star');
-  				children[i].classList.add('mui-icon-star-filled');
+  				children[i].classList.remove('mui-icon.svg-star');
+  				children[i].classList.add('mui-icon.svg-star-filled');
 	  		}
 	  	}else{
 	  		for (var i = index; i < 5; i++) {
-	  			children[i].classList.add('mui-icon-star')
-	  			children[i].classList.remove('mui-icon-star-filled')
+	  			children[i].classList.add('mui-icon.svg-star')
+	  			children[i].classList.remove('mui-icon.svg-star-filled')
 	  		}
 	  	}
 	  	starIndex = index;

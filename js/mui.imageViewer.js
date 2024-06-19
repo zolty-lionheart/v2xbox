@@ -51,7 +51,7 @@
 		//创建图片预览组件的整体 UI
 		createViewer: function() {
 			var self = this;
-			self.viewer = $.dom("<div class='mui-imageviewer'><div class='mui-imageviewer-mask'></div><div class='mui-imageviewer-header'><i class='mui-icon mui-icon-closeempty mui-imageviewer-close'></i><span class='mui-imageviewer-state'></span></div><i class='mui-icon mui-icon-arrowleft  mui-imageviewer-left'></i><i class='mui-icon mui-icon-arrowright mui-imageviewer-right'></i></div>");
+			self.viewer = $.dom("<div class='mui-imageviewer'><div class='mui-imageviewer-mask'></div><div class='mui-imageviewer-header'><i class='mui-icon.svg mui-icon.svg-closeempty mui-imageviewer-close'></i><span class='mui-imageviewer-state'></span></div><i class='mui-icon.svg mui-icon.svg-arrowleft  mui-imageviewer-left'></i><i class='mui-icon.svg mui-icon.svg-arrowright mui-imageviewer-right'></i></div>");
 			self.viewer = self.viewer[0] || self.viewer;
 			//self.viewer.style.height = screen.height;
 			self.closeButton = self.viewer.querySelector('.mui-imageviewer-close');

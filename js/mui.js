@@ -3456,9 +3456,9 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
     var CLASS_PULL_CAPTION_REFRESH = 'mui-pull-caption-refresh';
     var CLASS_PULL_CAPTION_NOMORE = 'mui-pull-caption-nomore';
 
-    var CLASS_ICON = 'mui-icon';
+    var CLASS_ICON = 'mui-icon.svg';
     var CLASS_SPINNER = 'mui-spinner';
-    var CLASS_ICON_PULLDOWN = 'mui-icon-pulldown';
+    var CLASS_ICON_PULLDOWN = 'mui-icon.svg-pulldown';
 
     var CLASS_BLOCK = 'mui-block';
     var CLASS_HIDDEN = 'mui-hidden';
@@ -3468,7 +3468,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
     var CLASS_LOADING_DOWN = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_ICON_PULLDOWN;
     var CLASS_LOADING = CLASS_PULL_LOADING + ' ' + CLASS_ICON + ' ' + CLASS_SPINNER;
 
-    var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
+    var pocketHtml = ['<div class="' + CLASS_PULL + '">', '<div class="{icon.svg}"></div>', '<div class="' + CLASS_PULL_CAPTION + '">{contentrefresh}</div>', '</div>'].join('');
 
     var PullRefresh = {
         init: function(element, options) {
@@ -7783,11 +7783,11 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  * @returns {undefined}
  */
 (function($, window, document) {
-	var CLASS_ICON = 'mui-icon';
-	var CLASS_ICON_CLEAR = 'mui-icon-clear';
-	var CLASS_ICON_SPEECH = 'mui-icon-speech';
-	var CLASS_ICON_SEARCH = 'mui-icon-search';
-	var CLASS_ICON_PASSWORD = 'mui-icon-eye';
+	var CLASS_ICON = 'mui-icon.svg';
+	var CLASS_ICON_CLEAR = 'mui-icon.svg-clear';
+	var CLASS_ICON_SPEECH = 'mui-icon.svg-speech';
+	var CLASS_ICON_SEARCH = 'mui-icon.svg-search';
+	var CLASS_ICON_PASSWORD = 'mui-icon.svg-eye';
 	var CLASS_INPUT_ROW = 'mui-input-row';
 	var CLASS_PLACEHOLDER = 'mui-placeholder';
 	var CLASS_TOOLTIP = 'mui-tooltip';
@@ -8302,7 +8302,7 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
  * @returns {undefined}
  */
 (function($, window, document) {
-    var CLASS_ICON = 'mui-icon';
+    var CLASS_ICON = 'mui-icon.svg';
     var CLASS_DISABLED = 'mui-disabled';
 
     var STATE_RESET = 'reset';
@@ -8372,8 +8372,8 @@ Function.prototype.bind = Function.prototype.bind || function(to) {
             var buttonApi = this.mui_plugin_button;
             if (!buttonApi) {
                 var loadingText = this.getAttribute('data-loading-text');
-                var loadingIcon = this.getAttribute('data-loading-icon');
-                var loadingIconPosition = this.getAttribute('data-loading-icon-position');
+                var loadingIcon = this.getAttribute('data-loading-icon.svg');
+                var loadingIconPosition = this.getAttribute('data-loading-icon.svg-position');
                 this.mui_plugin_button = buttonApi = new Button(this, {
                     loadingText: loadingText,
                     loadingIcon: loadingIcon,
