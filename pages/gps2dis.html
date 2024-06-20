@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8">
-    <title>经纬度间距计算</title>
+    <title>V2X 工具箱</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black">
@@ -11,6 +11,63 @@
     <!-- 标准mui.css -->
     <link rel="stylesheet" href="../css/mui.min.css">
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+    <style>
+        .label-red {
+            color: red;
+        }
+
+        .label-blue {
+            color: blue;
+        }
+
+        .mui-input-group .mui-input-row label {
+            width: 100px;
+        }
+
+        .mui-input-group .mui-input-row input {
+            width: calc(50% - 100px);
+            display: inline-block;
+        }
+
+        .mui-input-group .mui-input-row {
+            display: flex;
+            align-items: center;
+        }
+
+        .mui-input-group .mui-input-row span {
+            width: 100px;
+            text-align: center;
+        }
+
+        #mapContainer {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        #mapCanvas {
+            border: 1px solid #000000;
+            max-width: 100%;
+            height: auto;
+        }
+
+        #northLabel {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 12px;
+            background-color: rgba(255, 255, 255, 0.7);
+            padding: 2px 5px;
+            border-radius: 3px;
+        }
+
+        .canvas-container {
+            display: flex;
+            justify-content: center;
+            position: relative;
+        }
+    </style>
 </head>
 
 <body>
@@ -20,22 +77,39 @@
     </header>
     <div class="mui-content">
         <div class="mui-content-padded">
-            <div class="mui-textfield">
-                <input type="text" id="lat1" placeholder="输入第一个点的纬度" value="31.2304">
+            <form class="mui-input-group">
+                <div class="mui-input-row">
+                    <span class="label-red">点1</span>
+                    <input type="text" id="lat1" placeholder="输入纬度">
+                    <input type="text" id="lon1" placeholder="输入经度">
+                </div>
+                <div class="mui-input-row">
+                    <span class="label-blue">点2</span>
+                    <input type="text" id="lat2" placeholder="输入纬度">
+                    <input type="text" id="lon2" placeholder="输入经度">
+                </div>
+                <div class="mui-button-row">
+                    <button type="button" class="mui-btn mui-btn-primary"
+                        onclick="calculateDistanceAndBearing()">计算</button>&nbsp;&nbsp;
+                    <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+                    <button id="copyButton" type="button" class="mui-btn mui-btn-success"
+                        onclick="copyResult()">复制结果</button>
+                </div>
+                <div class="mui-input-row">
+                    <div id="result" class="mui-content-padded"></div>
+                </div>
+            </form>
+        </div>
+        <div class="mui-content-padded">
+            <p>输入两点经纬度。例如 点1 31.2304 121.4737 ; 点2 31.2304 121.4739。 </p>
+        </div>
+        <div class="mui-content-padded">
+            <div id="mapContainer">
+                <div class="canvas-container">
+                    <canvas id="mapCanvas" width="400" height="400"></canvas>
+                    <div id="northLabel">正北为0度</div>
+                </div>
             </div>
-            <div class="mui-textfield">
-                <input type="text" id="lon1" placeholder="输入第一个点的经度" value="121.4737">
-            </div>
-            <div class="mui-textfield">
-                <input type="text" id="lat2" placeholder="输入第二个点的纬度" value="31.2304">
-            </div>
-            <div class="mui-textfield">
-                <input type="text" id="lon2" placeholder="输入第二个点的经度" value="121.4739">
-            </div>
-            <button type="button" class="mui-btn mui-btn-primary mui-btn-block"
-                onclick="calculateDistance()">计算间距</button>
-            <button type="button" class="mui-btn mui-btn-danger mui-btn-block" onclick="clearFields()">清空</button>
-            <div id="result" class="mui-text-center" style="margin-top: 20px;"></div>
         </div>
     </div>
     <footer class="mui-bar mui-bar-footer">
@@ -44,14 +118,29 @@
         <span class="mui-tab-item" onclick="sendEmail()">Email: <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
     </footer>
 
+    <script src="../js/mui.min.js"></script>
     <script>
         function sendEmail() {
             window.location.href = "mailto:zolty@qq.com";
         }
-    </script>
-    <script src="../js/mui.min.js"></script>
-    <script>
-        function calculateDistance() {
+
+        function copyResult() {
+            const resultText = document.getElementById('result').textContent;
+            if (!resultText) {
+                alert("没有结果可供复制");
+                return;
+            }
+
+            const tempTextArea = document.createElement('textarea');
+            tempTextArea.value = resultText;
+            document.body.appendChild(tempTextArea);
+            tempTextArea.select();
+            document.execCommand('copy');
+            document.body.removeChild(tempTextArea);
+            alert("复制成功！");
+        }
+
+        function calculateDistanceAndBearing() {
             const lat1 = parseFloat(document.getElementById('lat1').value);
             const lon1 = parseFloat(document.getElementById('lon1').value);
             const lat2 = parseFloat(document.getElementById('lat2').value);
@@ -62,7 +151,7 @@
                 return;
             }
 
-            const R = 6371; // 地球半径（千米）
+            const R = 6371.009; // 地球半径（千米）
             const dLat = degreesToRadians(lat2 - lat1);
             const dLon = degreesToRadians(lon2 - lon1);
             const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -71,11 +160,21 @@
             const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             const distance = R * c * 1000; // 计算距离并转换为米
 
-            document.getElementById('result').textContent = `两个点之间的距离是 ${distance.toFixed(2)} 米。`;
+            const y = Math.sin(dLon) * Math.cos(degreesToRadians(lat2));
+            const x = Math.cos(degreesToRadians(lat1)) * Math.sin(degreesToRadians(lat2)) -
+                Math.sin(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) * Math.cos(dLon);
+            const bearing = (radiansToDegrees(Math.atan2(y, x)) + 360) % 360; // 计算方位角并转换为度
+
+            document.getElementById('result').textContent = `两点间距是 ${distance.toFixed(2)} 米，方位角是 ${bearing.toFixed(2)} 度。`;
+            drawMap(lat1, lon1, lat2, lon2);
         }
 
         function degreesToRadians(degrees) {
             return degrees * Math.PI / 180;
+        }
+
+        function radiansToDegrees(radians) {
+            return radians * 180 / Math.PI;
         }
 
         function clearFields() {
@@ -84,6 +183,57 @@
             document.getElementById('lat2').value = '';
             document.getElementById('lon2').value = '';
             document.getElementById('result').textContent = '';
+            clearMap();
+        }
+
+        function drawMap(lat1, lon1, lat2, lon2) {
+            const canvas = document.getElementById('mapCanvas');
+            const ctx = canvas.getContext('2d');
+
+            // 清除画布
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // 计算经纬度差值
+            const latDiff = lat2 - lat1;
+            const lonDiff = lon2 - lon1;
+
+            // 确定缩放比例
+            const scaleFactor = Math.min(canvas.width / Math.abs(lonDiff), canvas.height / Math.abs(latDiff)) * 0.8;
+
+            // 将经纬度转换为画布坐标
+            const point1 = {
+                x: canvas.width / 2 - lonDiff * scaleFactor / 2,
+                y: canvas.height / 2 + latDiff * scaleFactor / 2
+            };
+
+            const point2 = {
+                x: canvas.width / 2 + lonDiff * scaleFactor / 2,
+                y: canvas.height / 2 - latDiff * scaleFactor / 2
+            };
+
+            // 绘制点
+            ctx.fillStyle = 'red';
+            ctx.beginPath();
+            ctx.arc(point1.x, point1.y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+
+            ctx.fillStyle = 'blue';
+            ctx.beginPath();
+            ctx.arc(point2.x, point2.y, 5, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // 绘制连线
+            ctx.strokeStyle = 'black';
+            ctx.beginPath();
+            ctx.moveTo(point1.x, point1.y);
+            ctx.lineTo(point2.x, point2.y);
+            ctx.stroke();
+        }
+
+        function clearMap() {
+            const canvas = document.getElementById('mapCanvas');
+            const ctx = canvas.getContext('2d');
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
         }
     </script>
 </body>

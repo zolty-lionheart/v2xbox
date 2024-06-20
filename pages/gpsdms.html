@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>V2X 工具箱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- 标准mui.css -->
+  <link rel="stylesheet" href="../css/mui.min.css">
+</head>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">经纬度格式转换</h1>
+  </header>
+  <div class="mui-content">
+    <div class="mui-content-padded" style="margin: 2%">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>经纬度</label>
+          <input type="text" id="latitudeInput" class="mui-input-clear" placeholder="支持 dd dm dms"
+            oninput="convertLatitude()" />
+        </div>
+        <div class="mui-input-row">
+          <div id="decimalResult" class="mui-content-padded"></div>
+        </div>
+        <div class="mui-input-row">
+          <div id="dmsResult" class="mui-content-padded"></div>
+        </div>
+        <div class="mui-input-row">
+          <div id="degreeMinuteResult" class="mui-content-padded"></div>
+        </div>
+        <div class="mui-button-row">
+          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
+        </div>
+      </form>
+    </div>
+    <div class="mui-content-padded">
+      <p>输入示例：31.23040, 31°13.425', 31°13'25''</p>
+    </div>
+  </div>
+
+  <footer class="mui-bar mui-bar-footer">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span>
+    <span class="mui-tab-item">Designed by zolty</span>
+    <span class="mui-tab-item" onclick="sendEmail()">Email: <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
+  </footer>
+
+  <script src="../js/mui.min.js"></script>
+  <script>
+
+    function copyResult() {
+      const resultText = document.getElementById('decimalResult').textContent;
+      if (!resultText) {
+        alert("没有结果可供复制");
+        return;
+      }
+
+      const decimalResultContent = document.getElementById('decimalResult').textContent;
+      const dmsResultContent = document.getElementById('dmsResult').textContent;
+      const degreeMinuteResultContent = document.getElementById('degreeMinuteResult').textContent;
+
+      // 合并内容
+      const combinedContent =
+        `Decimal Result: ${decimalResultContent}\n` +
+        `DMS Result: ${dmsResultContent}\n` +
+        `Degree Minute Result: ${degreeMinuteResultContent}`;
+
+      // 创建一个临时的 textarea 元素
+      const textarea = document.createElement('textarea');
+
+      // 设置 textarea 的值为合并的内容
+      textarea.value = combinedContent;
+
+      // 将 textarea 元素添加到 DOM 中
+      document.body.appendChild(textarea);
+
+      // 选择 textarea 的内容
+      textarea.select();
+
+      // 执行复制命令
+      document.execCommand('copy');
+
+      // 移除临时的 textarea 元素
+      document.body.removeChild(textarea);
+
+      // 提示用户内容已复制
+      alert("复制成功！");
+    }
+
+    function convertLatitude() {
+      const input = document.getElementById('latitudeInput').value.trim();
+
+      const decimalRegex = /^-?\d+(\.\d+)?$/;
+      const degreeMinuteRegex = /^-?\d+°\d+(\.\d+)?'$/;
+      const dmsRegex = /^-?\d+°\d+'\d+(\.\d+)?''$/;
+
+      if (decimalRegex.test(input)) {
+        convertFromDecimal(parseFloat(input));
+      } else if (degreeMinuteRegex.test(input)) {
+        convertFromDegreeMinute(input);
+      } else if (dmsRegex.test(input)) {
+        convertFromDms(input);
+      } else {
+        document.getElementById('decimalResult').textContent = '请输入有效的格式。';
+        document.getElementById('dmsResult').textContent = '';
+        document.getElementById('degreeMinuteResult').textContent = '';
+      }
+    }
+
+    function convertFromDecimal(decimalDegrees) {
+      const degrees = Math.floor(decimalDegrees);
+      const minutes = Math.floor((decimalDegrees - degrees) * 60);
+      const seconds = ((decimalDegrees - degrees - minutes / 60) * 3600).toFixed(2);
+
+      const degreeMinute = `${degrees}°${(minutes + (seconds / 60)).toFixed(3)}'`;
+      const dms = `${degrees}°${minutes}'${seconds}''`;
+
+      document.getElementById('decimalResult').textContent = `度 . 度 格式：${decimalDegrees.toFixed(5)}°`;
+      document.getElementById('degreeMinuteResult').textContent = `度 . 分 格式：${degreeMinute}`;
+      document.getElementById('dmsResult').textContent = `度 . 分 . 秒 格式：${dms}`;
+    }
+
+    function convertFromDegreeMinute(degreeMinuteString) {
+      const parts = degreeMinuteString.match(/^(-?\d+)°(\d+(\.\d+)?)'$/);
+      const degrees = parseInt(parts[1]);
+      const minutes = parseFloat(parts[2]);
+      const decimalDegrees = degrees + minutes / 60;
+      const seconds = ((minutes - Math.floor(minutes)) * 60).toFixed(2);
+
+      const dms = `${degrees}°${Math.floor(minutes)}'${seconds}''`;
+
+      document.getElementById('decimalResult').textContent = `度 . 度 格式：${decimalDegrees.toFixed(5)}°`;
+      document.getElementById('degreeMinuteResult').textContent = `度 . 分 格式：${degreeMinuteString}`;
+      document.getElementById('dmsResult').textContent = `度 . 分 . 秒 格式：${dms}`;
+    }
+
+    function convertFromDms(dmsString) {
+      const parts = dmsString.match(/^(-?\d+)°(\d+)'(\d+(\.\d+)?)''$/);
+      const degrees = parseInt(parts[1]);
+      const minutes = parseInt(parts[2]);
+      const seconds = parseFloat(parts[3]);
+      const decimalDegrees = degrees + minutes / 60 + seconds / 3600;
+      const degreeMinute = `${degrees}°${(minutes + (seconds / 60)).toFixed(3)}'`;
+
+      document.getElementById('decimalResult').textContent = `度 . 度 格式：${decimalDegrees.toFixed(5)}°`;
+      document.getElementById('degreeMinuteResult').textContent = `度 . 分 格式：${degreeMinute}`;
+      document.getElementById('dmsResult').textContent = `度 . 分 . 秒 格式：${dmsString}`;
+    }
+  </script>
+</body>
+
+</html>

@@ -7,7 +7,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  
+
   <!-- 标准mui.css -->
   <link rel="stylesheet" href="../css/mui.min.css">
   <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
@@ -16,16 +16,28 @@
 <body>
   <header class="mui-bar mui-bar-nav">
     <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
-    <h1 class="mui-title">时间戳转换</h1>
+    <h1 class="mui-title">时间戳2时间</h1>
   </header>
   <div class="mui-content">
     <div class="mui-content-padded" style="margin: 2%">
-      <div class="mui-input-row mui-search">
-        <input type="text" id="timestampInput" class="mui-input-clear" placeholder="输入UTC时间戳，可以包含多个时间戳">
-      </div>
-      <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="convertTimestamp()">转换</button>
-      <div id="result" class="mui--text-center mui--text-dark-secondary" style="margin-top: 20px; font-size: 20px;">
-      </div>
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>时间戳</label>
+          <input type="text" id="timestampInput" class="mui-input-clear" placeholder="输入UTC时间戳">
+        </div>
+        <div class="mui-button-row">
+          <button type="button" class="mui-btn mui-btn-primary" onclick="convertTimestamp()">转换为时间戳</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
+        </div>
+        <div class="mui-input-row" style="height: auto;">
+          <div id="result" class="mui-content-padded"></div>
+        </div>
+      </form>
+    </div>
+    <div class="mui-content-padded">
+      <p>输入UTC时间戳，可以包含长文本包含多个时间戳。例如：-58 18 4 -57 0 0 124975 126637 0 0 1717553310072 2024-06-05 10:08:30.072 SPAT ::= {
+        1717553310073 1717553310075</p>
     </div>
   </div>
   <footer class="mui-bar mui-bar-footer">
@@ -41,6 +53,12 @@
   </script>
   <script src="../js/mui.min.js"></script>
   <script>
+
+    function reset() {
+      document.getElementById('timestampInput').value = '';
+      document.getElementById('result').textContent = '';
+    }
+
     function convertTimestamp() {
       const timestampInput = document.getElementById('timestampInput').value.trim();
       const timestamps = timestampInput.match(/\b\d{13}\b/g);
@@ -67,6 +85,17 @@
       } else {
         document.getElementById('result').textContent = '未找到有效的UTC时间戳';
       }
+    }
+
+    function copyResult() {
+      const resultText = document.getElementById('result').textContent;
+      const input = document.createElement('input');
+      input.value = resultText;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      alert("复制成功！");
     }
   </script>
 </body>

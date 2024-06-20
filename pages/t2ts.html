@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>V2X 工具箱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- 标准mui.css -->
+  <link rel="stylesheet" href="../css/mui.min.css">
+  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+</head>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">时间2时间戳</h1>
+  </header>
+  <div class="mui-content">
+    <div class="mui-content-padded" style="margin: 2%">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>时间</label>
+          <input type="text" id="datetimeInput" class="mui-input-clear" value="2024-06-20 14:23:45.678"
+            placeholder="输入格式如：2024-06-20 14:23:45.678">
+        </div>
+        <div class="mui-button-row">
+          <button type="button" class="mui-btn mui-btn-primary"
+            onclick="convertToTimestamp()">转换为时间戳</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
+        </div>
+        <div class="mui-input-row">
+          <div id="timestampResult" class="mui-content-padded"></div>
+        </div>
+      </form>
+    </div>
+  </div>
+  <footer class="mui-bar mui-bar-footer">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span>
+    <span class="mui-tab-item">Designed by zolty</span>
+    <span class="mui-tab-item" onclick="sendEmail()">Email: <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
+  </footer>
+
+  <script src="../js/mui.min.js"></script>
+  <script>
+    function sendEmail() {
+      window.location.href = "mailto:zolty@qq.com";
+    }
+
+    function convertToTimestamp() {
+      const datetimeInput = document.getElementById('datetimeInput').value.trim();
+      const date = new Date(datetimeInput);
+
+      if (!isNaN(date.getTime())) {
+        const timestamp = date.getTime();
+        document.getElementById('timestampResult').textContent = `转换结果：${timestamp}`;
+      } else {
+        document.getElementById('timestampResult').textContent = '请输入有效的日期和时间。';
+      }
+    }
+
+    function reset() {
+      document.getElementById('datetimeInput').value = '';
+      document.getElementById('timestampResult').textContent = '';
+      document.getElementById('copyButton').style.display = 'none';
+    }
+
+    function copyResult() {
+      const resultText = document.getElementById('timestampResult').textContent.replace('转换结果：', '').trim();
+      const input = document.createElement('input');
+      input.value = resultText;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      alert("复制成功！");
+    }
+  </script>
+</body>
+
+</html>

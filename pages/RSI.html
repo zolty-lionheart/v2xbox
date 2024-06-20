@@ -20,23 +20,32 @@
   </header>
   <div class="mui-content">
     <div class="mui-content-padded" style="margin: 2%">
-      <div class="mui-input-row mui-search">
-        <input type="search" id="searchInput1" class="mui-input-clear" placeholder="搜索序号">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>序号</label>
+          <input type="search" id="searchInput1" class="mui-input-clear" placeholder="搜索序号">
+        </div>
+        <div class="mui-input-row">
+          <label>标志编号</label>
+          <input type="search" id="searchInput2" class="mui-input-clear" placeholder="搜索标志编号">
+        </div>
+        <div class="mui-input-row">
+          <label>标志名称</label>
+          <input type="search" id="searchInput3" class="mui-input-clear" placeholder="搜索标志名称">
+        </div>
+        <div class="mui-input-row">
+          <label>条号</label>
+          <input type="search" id="searchInput4" class="mui-input-clear" placeholder="搜索条号">
+        </div>
+        <div class="mui-button-row">
+          <button type="button" class="mui-btn mui-btn-primary" onclick="search()">搜索</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
+        </div>
+      </form>
+      <div class="mui-input-row">
+        <ul id="trafficSignsList" class="mui-table-view"></ul>
       </div>
-      <div class="mui-input-row mui-search">
-        <input type="search" id="searchInput2" class="mui-input-clear" placeholder="搜索标志编号">
-      </div>
-      <div class="mui-input-row mui-search">
-        <input type="search" id="searchInput3" class="mui-input-clear" placeholder="搜索标志名称">
-      </div>
-      <div class="mui-input-row mui-search">
-        <input type="search" id="searchInput4" class="mui-input-clear" placeholder="搜索条号">
-      </div>
-      <button type="button" onclick="search()" class="mui-btn mui-btn-primary mui-icon mui-icon-search"
-        style="width: 100%;">
-        搜索
-      </button>
-      <ul id="trafficSignsList"></ul>
     </div>
   </div>
   <footer class="mui-bar mui-bar-footer">
@@ -48,6 +57,21 @@
   <script>
     function sendEmail() {
       window.location.href = "mailto:zolty@qq.com";
+    }
+
+    function reset() {
+      document.getElementById('searchInput1').value = '';
+      document.getElementById('searchInput2').value = '';
+      document.getElementById('searchInput3').value = '';
+      document.getElementById('searchInput4').value = '';
+    }
+
+    function copyResult() {
+      const trafficSignsList = document.getElementById('trafficSignsList');
+      const signTexts = Array.from(trafficSignsList.querySelectorAll('li')).map(li => li.textContent);
+      const textToCopy = signTexts.join('\n');
+      navigator.clipboard.writeText(textToCopy);
+      alert("复制成功！");
     }
   </script>
   <script src="../js/mui.min.js"></script>
@@ -66,6 +90,7 @@
       // 添加数据到列表
       signs.forEach(sign => {
         const listItem = document.createElement('li');
+        listItem.className = 'mui-table-view-cell';
         listItem.textContent = `${sign.id} - ${sign.no} - ${sign.name} - ${sign.rule}`;
         trafficSignsList.appendChild(listItem);
       });
