@@ -25,7 +25,7 @@
         }
 
         .mui-input-group .mui-input-row input {
-            width: calc(50% - 100px);
+            width: calc(50% - 10px);
             display: inline-block;
         }
 
@@ -101,7 +101,7 @@
             </form>
         </div>
         <div class="mui-content-padded">
-            <p>输入两点经纬度。例如 点1 31.2304 121.4737 ; 点2 31.2304 121.4739。 </p>
+            <p>例如 点1 31.2304 121.4737 ; 点2 31.2304 121.4739。 </p>
         </div>
         <div class="mui-content-padded">
             <div id="mapContainer">
@@ -112,11 +112,9 @@
             </div>
         </div>
     </div>
-    <footer class="mui-bar mui-bar-footer">
-        <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span>
-        <span class="mui-tab-item">Designed by zolty</span>
-        <span class="mui-tab-item" onclick="sendEmail()">Email: <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
-    </footer>
+	<footer class="mui-bar mui-bar-footer" style="height: auto;">
+		<span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span> By <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
+	</footer>
 
     <script src="../js/mui.min.js"></script>
     <script>
@@ -165,7 +163,7 @@
                 Math.sin(degreesToRadians(lat1)) * Math.cos(degreesToRadians(lat2)) * Math.cos(dLon);
             const bearing = (radiansToDegrees(Math.atan2(y, x)) + 360) % 360; // 计算方位角并转换为度
 
-            document.getElementById('result').textContent = `两点间距是 ${distance.toFixed(2)} 米，方位角是 ${bearing.toFixed(2)} 度。`;
+            document.getElementById('result').textContent = `两点间距 ${distance.toFixed(2)} 米，方位角 ${bearing.toFixed(2)} 度。`;
             drawMap(lat1, lon1, lat2, lon2);
         }
 
