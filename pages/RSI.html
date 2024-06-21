@@ -66,6 +66,13 @@
 
     function copyResult() {
       const trafficSignsList = document.getElementById('trafficSignsList');
+      const resultText = document.getElementById('trafficSignsList').textContent;
+
+      if(!resultText){
+        alert("暂无结果!");
+        return;
+      }
+      
       const signTexts = Array.from(trafficSignsList.querySelectorAll('li')).map(li => li.textContent);
       const textToCopy = signTexts.join('\n');
       navigator.clipboard.writeText(textToCopy);

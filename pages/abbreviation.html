@@ -85,6 +85,12 @@
 
         function copyResult() {
             const result = document.getElementById('result').innerHTML.replace(/<br>/g, '\n');
+
+            if (!result) {
+                alert("暂无结果!");
+                return;
+            }
+
             const tempInput = document.createElement('textarea');
             tempInput.value = result;
             document.body.appendChild(tempInput);

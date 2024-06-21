@@ -23,11 +23,11 @@
       <form class="mui-input-group">
         <div class="mui-input-row">
           <label>时间戳</label>
-          <input type="text" id="timestampInput" class="mui-input-clear" placeholder="输入UTC时间戳">
+          <input type="text" id="timestampInput" class="mui-input-clear" value="1717553310072 [noisy data] NULL NULL 1717553310073 1717553310075" placeholder="输入UTC时间戳">
         </div>
         <div class="mui-button-row">
           <button type="button" class="mui-btn mui-btn-primary" onclick="convertTimestamp()">转换为时间戳</button>&nbsp;&nbsp;
-          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="clearFields()">清空</button>&nbsp;&nbsp;
           <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
         </div>
         <div class="mui-input-row" style="height: auto;">
@@ -36,8 +36,7 @@
       </form>
     </div>
     <div class="mui-content-padded">
-      <p>输入UTC时间戳，可以包含长文本包含多个时间戳。例如：-58 18 4 -57 0 0 124975 126637 0 0 1717553310072 2024-06-05 10:08:30.072 SPAT ::= {
-        1717553310073 1717553310075</p>
+      <p>输入UTC时间戳，可以包含多个时间戳和噪声数据。例如：1717553310072 [noisy data] NULL NULL 1717553310073 1717553310075 </p>
     </div>
   </div>
 	<footer class="mui-bar mui-bar-footer" style="height: auto;">
@@ -52,7 +51,7 @@
   <script src="../js/mui.min.js"></script>
   <script>
 
-    function reset() {
+    function clearFields() {
       document.getElementById('timestampInput').value = '';
       document.getElementById('result').textContent = '';
     }
@@ -87,6 +86,12 @@
 
     function copyResult() {
       const resultText = document.getElementById('result').textContent;
+
+      if(!resultText){
+        alert("暂无结果!");
+        return;
+      }
+      
       const input = document.createElement('input');
       input.value = resultText;
       document.body.appendChild(input);

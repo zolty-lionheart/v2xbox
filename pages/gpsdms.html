@@ -35,7 +35,7 @@
           <div id="degreeMinuteResult" class="mui-content-padded"></div>
         </div>
         <div class="mui-button-row">
-          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="clearFields()">清空</button>&nbsp;&nbsp;
           <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
         </div>
       </form>
@@ -45,17 +45,24 @@
     </div>
   </div>
 
-	<footer class="mui-bar mui-bar-footer" style="height: auto;">
-		<span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span> By <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
-	</footer>
+  <footer class="mui-bar mui-bar-footer" style="height: auto;">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span> By <a
+      href="mailto:zolty@qq.com">zolty@qq.com</a></span>
+  </footer>
 
   <script src="../js/mui.min.js"></script>
   <script>
+    function clearFields() {
+      document.getElementById('latitudeInput').value = '';
+      document.getElementById('decimalResult').textContent = '';
+      document.getElementById('dmsResult').textContent = '';
+      document.getElementById('degreeMinuteResult').textContent = '';
+    }
 
     function copyResult() {
       const resultText = document.getElementById('decimalResult').textContent;
       if (!resultText) {
-        alert("没有结果可供复制");
+        alert("暂无结果!");
         return;
       }
 

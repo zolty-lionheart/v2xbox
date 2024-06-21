@@ -24,18 +24,21 @@
         <div class="mui-input-row">
           <label>时间</label>
           <input type="text" id="datetimeInput" class="mui-input-clear" value="2024-06-20 14:23:45.678"
-            placeholder="输入格式如：2024-06-20 14:23:45.678">
+            placeholder="输入时间">
         </div>
         <div class="mui-button-row">
           <button type="button" class="mui-btn mui-btn-primary"
             onclick="convertToTimestamp()">转换为时间戳</button>&nbsp;&nbsp;
-          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="clearFields()">清空</button>&nbsp;&nbsp;
           <button id="copyButton" type="button" class="mui-btn mui-btn-success" onclick="copyResult()">复制结果</button>
         </div>
         <div class="mui-input-row">
           <div id="timestampResult" class="mui-content-padded"></div>
         </div>
       </form>
+    </div>
+    <div class="mui-content-padded">
+      <p>输入UTC时间，输入格式如：2024-06-20 14:23:45.678</p>
     </div>
   </div>
 	<footer class="mui-bar mui-bar-footer" style="height: auto;">
@@ -60,14 +63,19 @@
       }
     }
 
-    function reset() {
+    function clearFields() {
       document.getElementById('datetimeInput').value = '';
       document.getElementById('timestampResult').textContent = '';
-      document.getElementById('copyButton').style.display = 'none';
     }
 
     function copyResult() {
       const resultText = document.getElementById('timestampResult').textContent.replace('转换结果：', '').trim();
+      
+      if(!resultText){
+        alert("暂无结果!");
+        return;
+      }
+      
       const input = document.createElement('input');
       input.value = resultText;
       document.body.appendChild(input);
