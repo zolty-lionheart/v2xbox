@@ -20,19 +20,34 @@
   </header>
   <div class="mui-content">
     <div class="mui-content-padded">
-      <div id="timestamp" class="mui-text-center" style="font-size: 20px; margin: 20px 0;">
+      <div id="timestampUTC8" class="mui-text-center" style="font-size: 20px; margin: 20px 0;">
         <span class="seconds mui--text-blue"></span><span class="milliseconds" style="color: orange;"></span>
       </div>
-      <button type="button" class="mui-btn mui-btn-primary mui-btn-block" onclick="copyText('timestamp')">复制时间戳</button>
+      <button type="button" class="mui-btn mui-btn-danger mui-btn-block"
+        onclick="copyText('timestampUTC8')">复制UTC+8时间戳</button>
+
       <div class="mui-divider"></div>
-      <div id="currentTime" class="mui-text-center" style="font-size: 20px; margin: 20px 0;"></div>
+      <div id="timestampUTC0" class="mui-text-center" style="font-size: 20px; margin: 20px 0;">
+        <span class="seconds-utc0 mui--text-blue"></span><span class="milliseconds-utc0" style="color: orange;"></span>
+      </div>
       <button type="button" class="mui-btn mui-btn-primary mui-btn-block"
-        onclick="copyText('currentTime')">复制当前时间</button>
+        onclick="copyText('timestampUTC0')">复制UTC+0时间戳</button>
+
+      <div class="mui-divider"></div>
+      <div id="currentTimeUTC8" class="mui-text-center" style="font-size: 20px; margin: 20px 0;"></div>
+      <button type="button" class="mui-btn mui-btn-danger mui-btn-block"
+        onclick="copyText('currentTimeUTC8')">复制当前UTC+8时间</button>
+
+      <div class="mui-divider"></div>
+      <div id="currentTimeUTC0" class="mui-text-center" style="font-size: 20px; margin: 20px 0;"></div>
+      <button type="button" class="mui-btn mui-btn-primary mui-btn-block"
+        onclick="copyText('currentTimeUTC0')">复制当前UTC+0时间</button>
     </div>
   </div>
-	<footer class="mui-bar mui-bar-footer" style="height: auto;">
-		<span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span> By <a href="mailto:zolty@qq.com">zolty@qq.com</a></span>
-	</footer>
+  <footer class="mui-bar mui-bar-footer" style="height: auto;">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span> By <a
+      href="mailto:zolty@qq.com">zolty@qq.com</a></span>
+  </footer>
 
   <script>
     function sendEmail() {
@@ -43,15 +58,31 @@
   <script>
     function updateTime() {
       const now = new Date();
-      const timestamp = now.getTime();
-      const seconds = Math.floor(timestamp / 1000);
-      const milliseconds = timestamp % 1000;
 
-      document.querySelector('.seconds').textContent = seconds;
-      document.querySelector('.milliseconds').textContent = ('00' + milliseconds).slice(-3);
+      // UTC+8
+      const offsetUTC8 = 8 * 60 * 60 * 1000;
+      const timestampUTC8 = now.getTime() + offsetUTC8;
+      const secondsUTC8 = Math.floor(timestampUTC8 / 1000);
+      const millisecondsUTC8 = timestampUTC8 % 1000;
 
-      const currentTime = now.toLocaleString('zh-CN', { hour12: false });
-      document.getElementById('currentTime').textContent = currentTime;
+      document.querySelector('.seconds').textContent = secondsUTC8;
+      document.querySelector('.milliseconds').textContent = ('00' + millisecondsUTC8).slice(-3);
+
+      const nowUTC8 = new Date(now.getTime());
+      const currentTimeUTC8 = nowUTC8.toLocaleString('zh-CN', { hour12: false });
+      document.getElementById('currentTimeUTC8').textContent = currentTimeUTC8;
+
+      // UTC+0
+      const timestampUTC0 = now.getTime();
+      const secondsUTC0 = Math.floor(timestampUTC0 / 1000);
+      const millisecondsUTC0 = timestampUTC0 % 1000;
+
+      document.querySelector('.seconds-utc0').textContent = secondsUTC0;
+      document.querySelector('.milliseconds-utc0').textContent = ('00' + millisecondsUTC0).slice(-3);
+
+      const nowUTC0 = new Date(now.getTime());
+      const currentTimeUTC0 = nowUTC0.toLocaleString('zh-CN', { timeZone: 'UTC', hour12: false });
+      document.getElementById('currentTimeUTC0').textContent = currentTimeUTC0;
     }
 
     function copyText(elementId) {
