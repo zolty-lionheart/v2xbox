@@ -14,7 +14,7 @@
 
 将时间戳转换为可读的日期和时间格式，帮助您更直观地理解时间戳的含义。
 
-[👉 立即体验](https://zolty-lionheart.github.io/v2xbox/pages/time2stamp.html)
+[👉 立即体验](https://zolty-lionheart.github.io/v2xbox/pages/ts2t.html)
 
 ### 3. RSI 道路标牌检索
 
