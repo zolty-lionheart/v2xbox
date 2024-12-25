@@ -28,6 +28,7 @@
         <div class="mui-button-row">
           <button type="button" class="mui-btn mui-btn-primary" id="addEvent">添加</button>&nbsp;&nbsp;
           <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="resetAll()">全部清空</button>&nbsp;&nbsp;
           <button type="button" class="mui-btn mui-btn-success" id="exportData">导出</button>
         </div>
 
@@ -44,8 +45,16 @@
 
   <script src="../js/mui.min.js"></script>
   <script>
+    let events = [];
+
     function reset() {
       document.getElementById('eventInfo').value = '';
+    }
+
+    function resetAll() {
+      document.getElementById('eventInfo').value = '';
+      eventList.innerHTML = '';
+      events = [];
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -53,8 +62,6 @@
       const eventInfoInput = document.getElementById('eventInfo');
       const addEventButton = document.getElementById('addEvent');
       const exportDataButton = document.getElementById('exportData');
-
-      let events = [];
 
       // 定义快速输入替换规则
       const quickInputRules = {
@@ -138,5 +145,4 @@
     });
   </script>
 </body>
-
 </html>
