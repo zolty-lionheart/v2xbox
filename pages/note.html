@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>V2X 工具箱</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+
+  <!-- 标准mui.css -->
+  <link rel="stylesheet" href="../css/mui.min.css">
+  <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+</head>
+
+<body>
+  <header class="mui-bar mui-bar-nav">
+    <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
+    <h1 class="mui-title">ADAS测试记录员</h1>
+  </header>
+  <div class="mui-content">
+    <div class="mui-content-padded" style="margin: 2%">
+      <form class="mui-input-group">
+        <div class="mui-input-row">
+          <label>事件</label>
+          <input type="text" id="eventInfo" class="mui-input-clear" placeholder="事件信息...">
+        </div>
+        <div class="mui-button-row">
+          <button type="button" class="mui-btn mui-btn-primary" id="addEvent">添加</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
+          <button type="button" class="mui-btn mui-btn-success" id="exportData">导出</button>
+        </div>
+
+      </form>
+      <div class="mui-input-row">
+        <ul id="eventList" class="mui-table-view"></ul>
+      </div>
+    </div>
+  </div>
+  <footer class="mui-bar mui-bar-footer" style="height: auto;">
+    <span class="mui-tab-item">Copyright &copy; 2024 V2XBox</span> By <a
+      href="mailto:zolty@qq.com">zolty@qq.com</a></span>
+  </footer>
+
+  <script src="../js/mui.min.js"></script>
+  <script>
+    function reset() {
+      document.getElementById('eventInfo').value = '';
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const eventList = document.getElementById('eventList');
+      const eventInfoInput = document.getElementById('eventInfo');
+      const addEventButton = document.getElementById('addEvent');
+      const exportDataButton = document.getElementById('exportData');
+
+      let events = [];
+
+      // 定义快速输入替换规则
+      const quickInputRules = {
+        // 测试
+        '000': '测试开始',
+        '001': '测试结束',
+        // 系统级事件，前缀为1
+        '111': '主动接管',
+        '112': '被动接管',
+        '113': '重启',
+        '114': '降级',
+        // 交规事件，前缀为2
+        '201': '压实线',
+        '202': '转向未打转向灯',
+        '203': '连续变道',
+        // 舒适类事件，前缀为3（注意：这里的分类可能因具体需求而异）
+        // 舒适子类 30 速度
+        '301': '急加速',
+        '302': '急减速',
+        // 舒适子类 31 起步类
+        '311': '起步较晚',
+        // 可以继续添加其他规则
+      };
+
+      // 监听输入框的输入事件
+      eventInfoInput.addEventListener('input', (event) => {
+        const inputValue = eventInfoInput.value;
+        let newValue = inputValue;
+
+        // 检查并替换快速输入
+        Object.keys(quickInputRules).forEach((key) => {
+          const regex = new RegExp(`\\b${key}\\b`, 'g'); // 使用单词边界来避免部分匹配
+          if (regex.test(newValue)) {
+            newValue = newValue.replace(regex, quickInputRules[key]);
+          }
+        });
+
+        // 如果替换后的值与原始值不同，则更新输入框的值
+        if (newValue !== inputValue) {
+          // 设置输入框的值，并移动光标到末尾（避免替换后光标位置不正确）
+          const startPos = eventInfoInput.selectionStart;
+          const endPos = eventInfoInput.selectionEnd;
+          eventInfoInput.value = newValue;
+          eventInfoInput.setSelectionRange(startPos + (newValue.length - inputValue.length), endPos + (newValue.length - inputValue.length));
+        }
+      });
+
+      addEventButton.addEventListener('click', () => {
+        const eventInfo = eventInfoInput.value.trim();
+        if (eventInfo) {
+          const currentTime = new Date().toLocaleString();
+          events.push({ time: currentTime, info: eventInfo });
+          renderEventList();
+          eventInfoInput.value = '';
+        } else {
+          alert('请填写事件信息');
+        }
+      });
+
+      function renderEventList() {
+        eventList.innerHTML = '';
+        events.forEach((event, index) => {
+          const listItem = document.createElement('li');
+          listItem.className = 'mui-table-view-cell';
+          listItem.textContent = `${event.time} - ${event.info}`;
+          eventList.appendChild(listItem);
+        });
+      }
+
+      exportDataButton.addEventListener('click', () => {
+        const blob = new Blob(events.map(event => `${event.time} - ${event.info}\n`).concat(''), { type: 'text/plain' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'events.txt';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    });
+  </script>
+</body>
+
+</html>
