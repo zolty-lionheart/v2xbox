@@ -11,29 +11,141 @@
   <!-- 标准mui.css -->
   <link rel="stylesheet" href="../css/mui.min.css">
   <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico?">
+  <style>
+    #topPopover {
+      position: fixed;
+      top: 16px;
+      right: 6px;
+    }
+
+    #topPopover .mui-popover-arrow {
+      left: auto;
+      right: 6px;
+    }
+
+    p {
+      text-indent: 22px;
+    }
+
+    span.mui-icon {
+      font-size: 14px;
+      color: #007aff;
+      margin-left: -15px;
+      padding-right: 10px;
+    }
+
+    .mui-popover {
+      height: 600px;
+      z-index: 2000;
+    }
+
+    .mui-btn-warning {
+      color: yellow;
+    }
+
+    .container {
+      position: relative;
+      /* 确保容器高度覆盖整个视口高度 */
+      overflow-y: auto;
+      /* 允许垂直滚动 */
+      padding-top: 60px;
+      /* 根据你的需求调整，这个值应与 .fixed-input-group 的高度一致 */
+    }
+
+    .header {
+      position: fixed;
+      top: 46px;
+      left: 0;
+      width: 100%;
+      /* 确保宽度覆盖整个视口 */
+      z-index: 1000;
+      /* 确保它位于其他内容之上 */
+      background-color: #fff;
+      /* 根据你的需求设置背景色 */
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      padding-left: 1%;
+      padding-right: 1%;
+      /* 可选：添加阴影效果 */
+    }
+
+    .content {
+      margin-top: 120px;
+      /* 根据你的需求调整，这个值应与 .fixed-input-group 的高度一致，确保列表不被遮挡 */
+    }
+  </style>
 </head>
 
 <body>
   <header class="mui-bar mui-bar-nav">
     <a class="mui-action-back mui-icon mui-icon-left-nav mui-pull-left"></a>
     <h1 class="mui-title">ADAS测试记录员</h1>
+    <a id="menu" class="mui-action-menu mui-icon mui-pull-right" href="#topPopover">？</a>
   </header>
   <div class="mui-content">
-    <div class="mui-content-padded" style="margin: 2%">
-      <form class="mui-input-group">
+    <!--右上角弹出菜单-->
+    <div id="topPopover" class="mui-popover">
+      <div class="mui-popover-arrow"></div>
+      <div class="mui-scroll-wrapper">
+        <div class="mui-scroll" id="quickInputRules">
+        </div>
+      </div>
+    </div>
+    <div class="mui-content-padded container">
+      <form class="mui-input-group header">
         <div class="mui-input-row">
           <label>事件</label>
           <input type="text" id="eventInfo" class="mui-input-clear" placeholder="事件信息...">
         </div>
-        <div class="mui-button-row">
-          <button type="button" class="mui-btn mui-btn-primary" id="addEvent">添加</button>&nbsp;&nbsp;
-          <button type="button" class="mui-btn mui-btn-danger" onclick="reset()">清空</button>&nbsp;&nbsp;
-          <button type="button" class="mui-btn mui-btn-danger" onclick="resetAll()">全部清空</button>&nbsp;&nbsp;
-          <button type="button" class="mui-btn mui-btn-success" id="exportData">导出</button>
+        <div class="mui-button-row mui-row">
+          <div class="mui-col-sm-2 mui-col-xs-2">
+            <button type="button" class="mui-btn mui-btn-primary" id="addEvent">添加</button>
+          </div>
+          <div class="mui-col-sm-2 mui-col-xs-2">
+            <button type="button" class="mui-btn mui-btn-danger" onclick="resetAll()">清空</button>
+          </div>
+          <div class="mui-col-sm-2 mui-col-xs-2">
+            <button type="button" class="mui-btn mui-btn-success" onclick="copy()">复制</button>
+          </div>
+          <div class="mui-col-sm-2 mui-col-xs-2">
+            <button type="button" class="mui-btn mui-btn-warning" id="exportData">导出</button>
+          </div>
+          <div class="mui-col-sm-2 mui-col-xs-2">
+            <button type="button" class="mui-btn " onclick="logEvent('测试开始')">开始</button>
+          </div>
+          <div class="mui-col-sm-2 mui-col-xs-2">
+            <button type="button" class="mui-btn " onclick="logEvent('测试结束')">结束</button>
+          </div>
         </div>
-
+        <div class="mui-button-row mui-row">
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('智驾启动')">智驾启动</button>
+          </div>
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('安全接管')">安全接管</button>
+          </div>
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('效率接管')">效率接管</button>
+          </div>
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('被动接管')">被动接管</button>
+          </div>
+        </div>
+        <div class="mui-button-row mui-row">
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('系统降级')">系统降级</button>
+          </div>
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('压实线')">压实线</button>
+          </div>
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('未打灯')">未打灯</button>
+          </div>
+          <div class="mui-col-sm-3 mui-col-xs-3">
+            <button type="button" class="mui-btn " onclick="logEvent('急减速')">急减速</button>
+          </div>
+        </div>
       </form>
-      <div class="mui-input-row">
+      <div class="mui-input-row content">
         <ul id="eventList" class="mui-table-view"></ul>
       </div>
     </div>
@@ -47,14 +159,65 @@
   <script>
     let events = [];
 
-    function reset() {
-      document.getElementById('eventInfo').value = '';
+    function createQuickInputListView(quickInputRules, parentElementSelector) {
+      // 获取父元素
+      const parentElement = document.querySelector(parentElementSelector);
+      // 创建一个<ul>元素并设置类名
+      const ulElement = document.createElement('ul');
+      ulElement.className = 'mui-table-view';
+      // 遍历quickInputRules对象
+      for (const key in quickInputRules) {
+        if (quickInputRules.hasOwnProperty(key)) {
+          // 创建一个<li>元素
+          const liElement = document.createElement('li');
+          liElement.className = 'mui-table-view-cell'; // 可选：设置类名以应用样式
+
+          // 设置<li>元素的文本内容为键和值的组合
+          liElement.textContent = `${key}-${quickInputRules[key]}`;
+
+          // 将<li>元素添加到<ul>元素中
+          ulElement.appendChild(liElement);
+        }
+      }
+      // 将<ul>元素添加到父元素中
+      parentElement.appendChild(ulElement);
     }
 
     function resetAll() {
-      document.getElementById('eventInfo').value = '';
-      eventList.innerHTML = '';
-      events = [];
+      var btnArray = ['取消', '确定'];
+      // 假设这里使用的是原生的confirm，如果要使用mui.confirm，请确保mui库已正确加载
+      // 由于您提供的代码混合了原生JS和mui框架的语法，这里为了简单起见，使用原生confirm
+      if (confirm('你确定要清空全部信息，进行下一次测试吗？')) {
+        document.getElementById('eventInfo').value = '';
+        eventList.innerHTML = '';
+        events = [];
+      }
+    }
+
+    function copy() {
+      const trafficSignsList = document.getElementById('eventList');
+      const resultText = document.getElementById('eventList').textContent;
+
+      if (!resultText) {
+        alert("暂无结果!");
+        return;
+      }
+
+      const signTexts = Array.from(trafficSignsList.querySelectorAll('li')).map(li => li.textContent);
+      const textToCopy = signTexts.join('\n');
+      navigator.clipboard.writeText(textToCopy);
+      alert("复制成功！");
+    }
+
+
+
+    function logEvent(eventInfo) {
+      const listItem = document.createElement('li');
+      listItem.className = 'mui-table-view-cell';
+      const currentTime = new Date().toLocaleString();
+      listItem.textContent = `${currentTime} - ${eventInfo}`;
+      eventList.appendChild(listItem);
+      events.push({ time: currentTime, info: eventInfo });
     }
 
     document.addEventListener('DOMContentLoaded', () => {
@@ -69,10 +232,11 @@
         '000': '测试开始',
         '001': '测试结束',
         // 系统级事件，前缀为1
-        '111': '主动接管',
-        '112': '被动接管',
-        '113': '重启',
-        '114': '降级',
+        '111': '安全接管',
+        '112': '效率接管',
+        '113': '被动接管',
+        '114': '重启',
+        '115': '降级',
         // 交规事件，前缀为2
         '201': '压实线',
         '202': '转向未打转向灯',
@@ -85,6 +249,8 @@
         '311': '起步较晚',
         // 可以继续添加其他规则
       };
+
+      createQuickInputListView(quickInputRules, '#quickInputRules');
 
       // 监听输入框的输入事件
       eventInfoInput.addEventListener('input', (event) => {
@@ -145,4 +311,5 @@
     });
   </script>
 </body>
+
 </html>
