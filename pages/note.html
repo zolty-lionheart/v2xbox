@@ -159,41 +159,31 @@
   <script>
     let events = [];
 
-    function createQuickInputListView(quickInputRules, parentElementSelector) {
-      // 获取父元素
-      const parentElement = document.querySelector(parentElementSelector);
-      // 创建一个<ul>元素并设置类名
-      const ulElement = document.createElement('ul');
-      ulElement.className = 'mui-table-view';
-      // 遍历quickInputRules对象
-      for (const key in quickInputRules) {
-        if (quickInputRules.hasOwnProperty(key)) {
-          // 创建一个<li>元素
-          const liElement = document.createElement('li');
-          liElement.className = 'mui-table-view-cell'; // 可选：设置类名以应用样式
-
-          // 设置<li>元素的文本内容为键和值的组合
-          liElement.textContent = `${key}-${quickInputRules[key]}`;
-
-          // 将<li>元素添加到<ul>元素中
-          ulElement.appendChild(liElement);
-        }
+    // 清空cookies
+    function clearAllCookies() {
+      const cookies = document.cookie.split("; ");
+      for (let cookie of cookies) {
+        const eqPos = cookie.indexOf("=");
+        const name = eqPos > -1 ? cookie.substr(0, eqPos) : cookie;
+        // 设置一个过去的日期作为过期时间
+        const expires = "expires=Thu, 01 Jan 1970 00:00:00 GMT";
+        // 设置Cookie的路径为根路径，以确保匹配所有路径的Cookie
+        document.cookie = name + "=" + "; " + expires + "; path=/";
       }
-      // 将<ul>元素添加到父元素中
-      parentElement.appendChild(ulElement);
     }
 
+    // 清空按钮
     function resetAll() {
       var btnArray = ['取消', '确定'];
       // 假设这里使用的是原生的confirm，如果要使用mui.confirm，请确保mui库已正确加载
       // 由于您提供的代码混合了原生JS和mui框架的语法，这里为了简单起见，使用原生confirm
       if (confirm('你确定要清空全部信息，进行下一次测试吗？')) {
-        document.getElementById('eventInfo').value = '';
-        eventList.innerHTML = '';
-        events = [];
+        clearAllCookies();
+        renderEventList();
       }
     }
 
+    // 复制按钮
     function copy() {
       const trafficSignsList = document.getElementById('eventList');
       const resultText = document.getElementById('eventList').textContent;
@@ -209,24 +199,58 @@
       alert("复制成功！");
     }
 
-
-
-    function logEvent(eventInfo) {
-      const listItem = document.createElement('li');
-      listItem.className = 'mui-table-view-cell';
-      const currentTime = new Date().toLocaleString();
-      listItem.textContent = `${currentTime} - ${eventInfo}`;
-      eventList.appendChild(listItem);
-      events.push({ time: currentTime, info: eventInfo });
+    // 存储log至cookie
+    function log2cookie(time, info, days) {
+      let expires = "";
+      if (days) {
+        const date = new Date();
+        date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+        expires = "; expires=" + date.toUTCString();
+      }
+      document.cookie = time + "=" + (info || "") + expires + "; path=/";
     }
 
+    // 读取所有cookies
+    function getAllCookies() {
+      const cookies = {};
+      const cookieString = document.cookie;
+      if (cookieString) {
+        const cookiePairs = cookieString.split("; ");
+        for (let pair of cookiePairs) {
+          const [name, ...value] = pair.split("=");
+          cookies[name.trim()] = decodeURIComponent(value.join("=").trim());
+        }
+      }
+      console.log(cookies);
+      return cookies;
+    }
+
+    // 加载清单
+    function renderEventList() {
+      eventList.innerHTML = '';
+      const allCookies = getAllCookies();
+      for (let name in allCookies) {
+        if (allCookies.hasOwnProperty(name)) {
+          console.log(`${name}: ${allCookies[name]}`);
+          const listItem = document.createElement('li');
+          listItem.className = 'mui-table-view-cell';
+          listItem.textContent = `${name} - ${allCookies[name]}`;
+          eventList.appendChild(listItem);
+        }
+      }
+    }
+
+    // 页面初始化  
     document.addEventListener('DOMContentLoaded', () => {
       const eventList = document.getElementById('eventList');
       const eventInfoInput = document.getElementById('eventInfo');
       const addEventButton = document.getElementById('addEvent');
       const exportDataButton = document.getElementById('exportData');
 
-      // 定义快速输入替换规则
+      // 加载所有测试历史
+      renderEventList();
+
+      // 快速输入替换规则 清单
       const quickInputRules = {
         // 测试
         '000': '测试开始',
@@ -250,9 +274,35 @@
         // 可以继续添加其他规则
       };
 
+      // 快速输入替换规则 帮助
+      function createQuickInputListView(quickInputRules, parentElementSelector) {
+        // 获取父元素
+        const parentElement = document.querySelector(parentElementSelector);
+        // 创建一个<ul>元素并设置类名
+        const ulElement = document.createElement('ul');
+        ulElement.className = 'mui-table-view';
+        // 遍历quickInputRules对象
+        for (const key in quickInputRules) {
+          if (quickInputRules.hasOwnProperty(key)) {
+            // 创建一个<li>元素
+            const liElement = document.createElement('li');
+            liElement.className = 'mui-table-view-cell'; // 可选：设置类名以应用样式
+
+            // 设置<li>元素的文本内容为键和值的组合
+            liElement.textContent = `${key}-${quickInputRules[key]}`;
+
+            // 将<li>元素添加到<ul>元素中
+            ulElement.appendChild(liElement);
+          }
+        }
+        // 将<ul>元素添加到父元素中
+        parentElement.appendChild(ulElement);
+      }
+
+      // 快速输入替换规则 帮助启用
       createQuickInputListView(quickInputRules, '#quickInputRules');
 
-      // 监听输入框的输入事件
+      // 快速输入替换规则
       eventInfoInput.addEventListener('input', (event) => {
         const inputValue = eventInfoInput.value;
         let newValue = inputValue;
@@ -275,40 +325,51 @@
         }
       });
 
+      // 添加按钮
       addEventButton.addEventListener('click', () => {
         const eventInfo = eventInfoInput.value.trim();
         if (eventInfo) {
           const currentTime = new Date().toLocaleString();
-          events.push({ time: currentTime, info: eventInfo });
+          log2cookie(currentTime, eventInfo, 7); // 存储日志信息，有效期为7天
           renderEventList();
-          eventInfoInput.value = '';
         } else {
           alert('请填写事件信息');
         }
       });
 
-      function renderEventList() {
-        eventList.innerHTML = '';
-        events.forEach((event, index) => {
-          const listItem = document.createElement('li');
-          listItem.className = 'mui-table-view-cell';
-          listItem.textContent = `${event.time} - ${event.info}`;
-          eventList.appendChild(listItem);
-        });
-      }
-
+      // 导出按钮
       exportDataButton.addEventListener('click', () => {
-        const blob = new Blob(events.map(event => `${event.time} - ${event.info}\n`).concat(''), { type: 'text/plain' });
+        // 获取所有的cookies
+        const cookies = document.cookie.split("; ");
+        const cookieLines = cookies.map(cookie => {
+          const [name, ...values] = cookie.split("=");
+          const value = decodeURIComponent(values.join("=")); // 处理包含=的cookie值
+          return `${name} = ${value}\n`;
+        });
+
+        // 创建一个Blob对象，包含所有的cookie信息
+        const blob = new Blob(cookieLines, { type: 'text/plain' });
         const url = URL.createObjectURL(blob);
+
+        // 创建一个临时的<a>元素来触发下载
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'events.txt';
+        a.download = 'cookies.txt';
         document.body.appendChild(a);
-        a.click();
-        document.body.removeChild(a);
+        a.click(); // 触发下载
+        document.body.removeChild(a); // 移除<a>元素
+
+        // 释放URL对象
         URL.revokeObjectURL(url);
       });
     });
+
+    // 事件按钮
+    function logEvent(eventInfo) {
+      const currentTime = new Date().toLocaleString();
+      log2cookie(currentTime, eventInfo, 7); // 存储日志信息，有效期为7天
+      renderEventList();
+    }
   </script>
 </body>
 
