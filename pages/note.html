@@ -331,6 +331,7 @@
         if (eventInfo) {
           const currentTime = new Date().toLocaleString();
           log2cookie(currentTime, eventInfo, 7); // 存储日志信息，有效期为7天
+          eventInfoInput.value = null;
           renderEventList();
         } else {
           alert('请填写事件信息');
@@ -354,7 +355,19 @@
         // 创建一个临时的<a>元素来触发下载
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'cookies.txt';
+
+        const currentTime = new Date();
+
+        // 获取年、月、日和小时
+        const year = currentTime.getFullYear();
+        const month = String(currentTime.getMonth() + 1).padStart(2, '0'); // 月份从0开始，所以需要加1，并且确保两位数
+        const day = String(currentTime.getDate()).padStart(2, '0'); // 确保两位数
+        const hours = String(currentTime.getHours()).padStart(2, '0'); // 确保两位数
+
+        // 组合成“年月日时”格式的字符串
+        const formattedTime = `${year}${month}${day}${hours}`;
+
+        a.download = formattedTime + '-log.txt';
         document.body.appendChild(a);
         a.click(); // 触发下载
         document.body.removeChild(a); // 移除<a>元素
